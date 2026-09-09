@@ -89,7 +89,6 @@ Two bass lines with MIDI files were generated for each temperature in the list: 
     </tr>
   </tbody>
 </table>
-</div>
 
 #### Pitch, interval and duration comparison
 
@@ -145,14 +144,7 @@ Held-out perplexity, unigram-only baseline: 66.2
     </tr>
   </tbody>
 </table>
-</div>
 
 #### Visual comparison
 
 ![visual_comparison](image/README/visual_comparison.png)
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
