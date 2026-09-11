@@ -52,6 +52,9 @@ Number of contexts per order: 1 - 1905; 2 - 19749; 3 - 56846.
 
 Two bass lines with MIDI files were generated for each temperature in the list: [0.5, 0.7, 0.9, 1, 1.15, 1.5]
 
+Entropy measures how spread out and unpredictable pitch choices are. The generated bass lines show more concentration on a few common notes. The model is more conservative in pitch choice than real bass lines. The variety of pitch intervals between consecutive notes is nearly as diverse as the original. Which could show that the intervals are shaped by the third order transition structure the model learned.
+The 3-gram Jaccard measures how much the set of 3-note pitch sequences overlaps between original and generated. The results show that almost none of the specific 3-note pitch patterns in the generated output match patterns that exist in the real corpus. In contrast to the pitch entropy it shows the model isn't just replaying memorized fragments at the 3-gram level.
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: left;">
@@ -82,15 +85,19 @@ Two bass lines with MIDI files were generated for each temperature in the list: 
 
 #### Pitch, interval and duration comparison
 
+The pitch histogram shows a match to the lower pitch entropy, with a sharp peak around ~35 and a lesser spread into higher pitches. Interval histograms are both concetrated near 0, but the generated show a higher and narrower peak. The durations show a large mismatch, as the entropy values do also, with the generated ones having a bigger tendency to the shorter notes.
+
 ![histogram_comparison](image/README/histogram_comparison.png)
 
 #### Duration comparison
+
+The duration comparison shows the same findings as the histogram, where original durations have a tail of outliers stretching up to ~60 seconds, and the generated ones are clustered to ~3 seconds mark. The model never produces the longer sustained notes seen in real data.
 
 ![duration_comparison](image/README/duration_comparison.png)
 
 #### Note transitions
 
-The note transitions show a
+The original note transitions show a tendency to note repeats, which is expected of base lines. Generated sequences seem to have an inclination to follow the rule, but differences can obviously be seen.
 
 ![note_transitions](image/README/note_transitions.png)
 
@@ -160,6 +167,8 @@ A novelty check was done to make sure if the model is generating new bass lines 
 
 The share of 5-grams from the test set that already appear in the train set is 0.54. Compared to this the overlap between the train and generated sequences gives a higher result. This shows that the model might be copying training examples instead of creating new ones. Looking at temperature values the train-generated overlap gives values constantly over the baseline 0.54 with an almost constant drop folowing the temperature values. The test-generated overlap has a sudden drop of values for temperatures over 0.9. This drop shows the effect of temperature in generating midi sequences.
 
+In comparison to the 3-gram Jaccard which only looks at raw pitch values, 3 at a time, flattening all songs together with all temperatures mix together, this looks at full tokens, 5 at a time, with no crossing between songs. The Jaccard is calculated as |A ∩ B| / |A ∪ B|, so even if all generated 3-gram patterns already exist somewhere in the original set, the Jaccard score would still be low. Just because the union is dominated by the enormous number of pitch-patterns in the original corpus that the small generated sample simply never touches. For these reasons a novelty check was needed to truly see how much of an overlap exists.
+
 #### Pitch divergence over time
 
 A graph of per temperature pitch divergence over time, shows how the sequences compare to the original bass lines with each step. It is seen that with passing the degree of the markov model (the third step) all generated sequences stop following the original pattern and start a constant rise in divergence. It can also be seen that with temperature values increasing the pitch divergence also increases. This is to be expected since the temperatures represent the conservativeness of the generated sequences. The closest resemblence is received with a temperature of 0.9, but it is also shown that the further the steps go from the degree of the model, the more the lines stop resembling the original divergence.
@@ -167,5 +176,7 @@ A graph of per temperature pitch divergence over time, shows how the sequences c
 ![pitch_divergence](image/README/pitch_divergence.png)
 
 #### Subjective visual and audio comparison
+
+When looking and listeing to the generated sequences in comparsion to the original files, the same conclusions can be made. As temperature rises the rhythm and pitch are more diverse. But the more the files are listened to the more they diverge from the starting sequence.
 
 ![visual_comparison](image/README/visual_comparison.png)
